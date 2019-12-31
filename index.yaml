@@ -1,0 +1,33 @@
+apiVersion: v1
+entries:
+  traefik:
+  - apiVersion: v1
+    appVersion: 1.7.20
+    created: "2019-12-31T17:16:19.170705+01:00"
+    description: A Traefik based Kubernetes ingress controller with Let's Encrypt
+      support
+    digest: abc733d23faa13de430f7622b73496ce828a9e69d22326426c81fda88740b875
+    home: https://traefik.io/
+    icon: https://docs.traefik.io/img/traefik.logo.png
+    keywords:
+    - traefik
+    - ingress
+    - acme
+    - letsencrypt
+    maintainers:
+    - email: kent.rancourt@microsoft.com
+      name: krancour
+    - email: emile@vauge.com
+      name: emilevauge
+    - email: daniel.tomcej@gmail.com
+      name: dtomcej
+    - email: ludovic@containo.us
+      name: ldez
+    name: traefik
+    sources:
+    - https://github.com/containous/traefik
+    - https://github.com/helm/charts/tree/master/stable/traefik
+    urls:
+    - https://alekitto.github.io/charts/traefik-1.86.0.tgz
+    version: 1.86.0
+generated: "2019-12-31T17:16:19.164567+01:00"
