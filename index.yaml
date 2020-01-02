@@ -1,9 +1,31 @@
 apiVersion: v1
 entries:
+  postgresql:
+  - apiVersion: v1
+    appVersion: 11.6.0
+    created: "2020-01-02T22:00:40.209002+01:00"
+    description: Chart for PostgreSQL, an object-relational database management system
+      (ORDBMS) with an emphasis on extensibility and on standards-compliance.
+    digest: 91d540380ec193b800eb69e6c78286cdd46d9ba32988208d7cbd9637347e33bc
+    home: https://www.postgresql.org/
+    icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-110x117.png
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    - cluster
+    name: postgresql
+    sources:
+    - https://github.com/bitnami/bitnami-docker-postgresql
+    urls:
+    - https://alekitto.github.io/charts/postgresql-8.1.2.tgz
+    version: 8.1.2
   traefik:
   - apiVersion: v1
     appVersion: 1.7.20
-    created: "2019-12-31T17:16:19.170705+01:00"
+    created: "2020-01-02T22:00:40.211031+01:00"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: abc733d23faa13de430f7622b73496ce828a9e69d22326426c81fda88740b875
@@ -30,4 +52,4 @@ entries:
     urls:
     - https://alekitto.github.io/charts/traefik-1.86.0.tgz
     version: 1.86.0
-generated: "2019-12-31T17:16:19.164567+01:00"
+generated: "2020-01-02T22:00:40.206257+01:00"
