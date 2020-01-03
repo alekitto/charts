@@ -3,7 +3,7 @@ entries:
   postgresql:
   - apiVersion: v1
     appVersion: 11.6.0
-    created: "2020-01-02T22:00:40.209002+01:00"
+    created: "2020-01-03T15:14:35.617763+01:00"
     description: Chart for PostgreSQL, an object-relational database management system
       (ORDBMS) with an emphasis on extensibility and on standards-compliance.
     digest: 91d540380ec193b800eb69e6c78286cdd46d9ba32988208d7cbd9637347e33bc
@@ -25,10 +25,10 @@ entries:
   traefik:
   - apiVersion: v1
     appVersion: 1.7.20
-    created: "2020-01-02T22:00:40.211031+01:00"
+    created: "2020-01-03T15:14:35.619971+01:00"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
-    digest: abc733d23faa13de430f7622b73496ce828a9e69d22326426c81fda88740b875
+    digest: faceea64ade0e935da15773a0bf40384c3d585c1f082adc655396185e8bed84f
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -36,15 +36,6 @@ entries:
     - ingress
     - acme
     - letsencrypt
-    maintainers:
-    - email: kent.rancourt@microsoft.com
-      name: krancour
-    - email: emile@vauge.com
-      name: emilevauge
-    - email: daniel.tomcej@gmail.com
-      name: dtomcej
-    - email: ludovic@containo.us
-      name: ldez
     name: traefik
     sources:
     - https://github.com/containous/traefik
@@ -52,4 +43,4 @@ entries:
     urls:
     - https://alekitto.github.io/charts/traefik-1.86.0.tgz
     version: 1.86.0
-generated: "2020-01-02T22:00:40.206257+01:00"
+generated: "2020-01-03T15:14:35.613278+01:00"
