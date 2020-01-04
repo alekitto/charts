@@ -1,9 +1,28 @@
 apiVersion: v1
 entries:
+  gitlab:
+  - apiVersion: v1
+    appVersion: master
+    created: "2020-01-04T13:14:33.078632+01:00"
+    description: Web-based Git-repository manager with wiki and issue-tracking features.
+    digest: a84739325916223b243e3891dab339951f7132ff869ba0e6622aab59991edd92
+    home: https://about.gitlab.com/
+    icon: https://gitlab.com/gitlab-com/gitlab-artwork/raw/master/logo/logo-square.svg
+    keywords:
+    - gitlab
+    maintainers:
+    - email: support@gitlab.com
+      name: GitLab Inc.
+    name: gitlab
+    sources:
+    - https://gitlab.com/gitlab-org/charts/gitlab
+    urls:
+    - https://alekitto.github.io/charts/gitlab-0.1.0.tgz
+    version: 0.1.0
   postgresql:
   - apiVersion: v1
     appVersion: 11.6.0
-    created: "2020-01-03T15:14:35.617763+01:00"
+    created: "2020-01-04T13:14:33.081274+01:00"
     description: Chart for PostgreSQL, an object-relational database management system
       (ORDBMS) with an emphasis on extensibility and on standards-compliance.
     digest: 91d540380ec193b800eb69e6c78286cdd46d9ba32988208d7cbd9637347e33bc
@@ -25,7 +44,7 @@ entries:
   traefik:
   - apiVersion: v1
     appVersion: 1.7.20
-    created: "2020-01-03T15:14:35.619971+01:00"
+    created: "2020-01-04T13:14:33.083842+01:00"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: faceea64ade0e935da15773a0bf40384c3d585c1f082adc655396185e8bed84f
@@ -43,4 +62,4 @@ entries:
     urls:
     - https://alekitto.github.io/charts/traefik-1.86.0.tgz
     version: 1.86.0
-generated: "2020-01-03T15:14:35.613278+01:00"
+generated: "2020-01-04T13:14:33.067295+01:00"
