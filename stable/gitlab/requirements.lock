@@ -1,0 +1,18 @@
+dependencies:
+- name: cert-manager
+  repository: https://charts.jetstack.io/
+  version: v0.10.1
+- name: prometheus
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 10.2.0
+- name: postgresql
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 0.12.0
+- name: gitlab-runner
+  repository: https://charts.gitlab.io/
+  version: 0.12.0
+- name: grafana
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 4.0.1
+digest: sha256:0c52d2cc8311be987c5fc96efb6c8fa7041040d4f9013b4db9fda97ae2cb2f74
+generated: "2020-01-17T13:01:32.975104+01:00"
