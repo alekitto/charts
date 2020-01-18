@@ -179,6 +179,15 @@ extraEnv: []
 ## ConfigMap with PostgreSQL extended configuration
 # extendedConfConfigMap:
 
+## preinitdb scripts
+## Specify dictionary of scripts to be run before initialization
+## Alternatively, you can put your scripts under the files/docker-entrypoint-preinitdb.d directory
+##
+# preinitdbScripts:
+#   my_init_script.sh: |
+#      #!/bin/sh
+#      echo "Do something."
+
 ## initdb scripts
 ## Specify dictionary of scripts to be run at first boot
 ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
