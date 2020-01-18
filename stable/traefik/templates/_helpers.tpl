@@ -173,3 +173,12 @@ Helper for containerPort (https)
 	443
 	{{- end -}}
 {{- end -}}
+
+{{/*
+Helper to encode dashboard users
+*/}}
+{{- define "traefik.dashboard.users" -}}
+{{- range $key, $value := .Values.dashboard.auth.basic -}}
+{{ $key }}:{{ $value }}
+{{- end }}
+{{- end -}}

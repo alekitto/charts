@@ -162,9 +162,6 @@ spec:
           hostPort: {{ default 80 .Values.deployment.hostPort.httpPort }}
           {{- end }}
           protocol: TCP
-        - name: httpn
-          containerPort: 8880
-          protocol: TCP
         - name: https
           containerPort: {{ template "traefik.containerPort.https" . }}
           {{- if .Values.deployment.hostPort.httpsEnabled }}

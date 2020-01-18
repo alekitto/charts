@@ -1,0 +1,48 @@
+{{- if .Values.dashboard.enabled }}
+{{- if .Values.dashboard.auth }}
+{{- if .Values.dashboard.auth.basic }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+    name: {{ template "traefik.fullname" . }}-dashboard-auth-secret
+data:
+    users: |
+        {{ include "traefik.dashboard.users" . | b64enc }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+    name: {{ template "traefik.fullname" . }}-dashboard-auth-middleware
+spec:
+    basicAuth:
+        secret: {{ template "traefik.fullname" . }}-dashboard-auth-secret
+---
+{{- end }}
+{{- end }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+    name: {{ template "traefik.fullname" . }}-dashboard
+    labels:
+        app: {{ template "traefik.name" . }}
+        chart: {{ template "traefik.chart" . }}
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
+spec:
+    entryPoints:
+        - traefik
+    routes:
+        - match: PathPrefix(`/`)
+          kind: Rule
+          services:
+              - name: api@internal
+                namespace: default
+                kind: TraefikService
+          middlewares:
+              - name: {{ template "traefik.fullname" . }}-dashboard-auth-middleware
+    {{- if .Values.dashboard.ingress.tls }}
+    tls:
+        {{ toYaml .Values.dashboard.ingress.tls | indent 8 }}
+    {{- end -}}
+{{- end }}

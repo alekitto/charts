@@ -1,0 +1,40 @@
+{{- if .Values.ssl.enforced }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+    name: {{ template "traefik.fullname" . }}-ssl-enforced-http-route
+    labels:
+        app: {{ template "traefik.name" . }}
+        chart: {{ template "traefik.chart" . }}
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
+spec:
+    entryPoints:
+        - http
+    routes:
+        - match: PathPrefix(`/`)
+          kind: Rule
+          services:
+            - name: ping@internal
+              namespace: default
+              kind: TraefikService
+          priority: 100000
+          middlewares:
+            - name: {{ template "traefik.fullname" . }}-ssl-enforced-redirect-middleware
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+    name: {{ template "traefik.fullname" . }}-ssl-enforced-redirect-middleware
+    labels:
+        app: {{ template "traefik.name" . }}
+        chart: {{ template "traefik.chart" . }}
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
+spec:
+    redirectScheme:
+        scheme: https
+        {{- if .Values.ssl.permanentRedirect }}
+        permanent: true
+        {{- end }}
+{{- end }}

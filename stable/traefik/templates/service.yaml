@@ -46,18 +46,16 @@ spec:
     nodePort: {{ .Values.service.nodePorts.http }}
     {{- end }}
     targetPort: http
+  {{- if .Values.ssl.enabled }}
   - port: 443
     name: https
     {{- if (and (eq .Values.serviceType "NodePort") (eq .Values.deployType "Deployment") (not (empty .Values.service.nodePorts.https)))}}
     nodePort: {{ .Values.service.nodePorts.https }}
     {{- end }}
-    {{- if not .Values.ssl.enabled }}
-    targetPort: httpn
-    {{- else }}
     targetPort: https
-    {{- end }}
-  {{- if (and (.Values.metrics.prometheus.enabled) (eq .Values.deployType "Deployment") (not (.Values.metrics.prometheus.restrictAccess)))}}
-  - port: 8080
+  {{- end }}
+  {{- if (.Values.metrics.prometheus.enabled)}}
+  - port: 9105
     name: metrics
-    targetPort: dash
+    targetPort: metrics
   {{- end }}

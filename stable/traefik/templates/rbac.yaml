@@ -38,6 +38,18 @@ rules:
       - ingresses/status
     verbs:
       - update
+  - apiGroups:
+    - traefik.containo.us
+    resources:
+      - ingressroutes
+      - ingressroutetcps
+      - middlewares
+      - tlsoptions
+      - traefikservices
+    verbs:
+      - get
+      - list
+      - watch
 ---
 kind: {{ include "traefik.rbac.scope" . | printf "%sRoleBinding" }}
 {{- if semverCompare "^1.8-0" .Capabilities.KubeVersion.GitVersion }}
