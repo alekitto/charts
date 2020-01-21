@@ -3,7 +3,7 @@ entries:
   gitlab:
   - apiVersion: v1
     appVersion: master
-    created: "2020-01-18T15:10:19.242718+01:00"
+    created: "2020-01-21T12:23:55.133719+01:00"
     dependencies:
     - alias: certmanager
       condition: certmanager.install
@@ -43,7 +43,7 @@ entries:
     version: 2.6.3
   - apiVersion: v1
     appVersion: master
-    created: "2020-01-18T15:10:19.194055+01:00"
+    created: "2020-01-21T12:23:55.082862+01:00"
     description: Web-based Git-repository manager with wiki and issue-tracking features.
     digest: a84739325916223b243e3891dab339951f7132ff869ba0e6622aab59991edd92
     home: https://about.gitlab.com/
@@ -62,7 +62,7 @@ entries:
   postgresql:
   - apiVersion: v1
     appVersion: 11.6.0
-    created: "2020-01-18T15:10:19.24499+01:00"
+    created: "2020-01-21T12:23:55.135361+01:00"
     description: Chart for PostgreSQL, an object-relational database management system
       (ORDBMS) with an emphasis on extensibility and on standards-compliance.
     digest: a6de3a59175dc72a3a2682a60a574256bdc60089dd5c8ca2b892cbbb374596bf
@@ -84,10 +84,10 @@ entries:
   traefik:
   - apiVersion: v1
     appVersion: 2.1.1
-    created: "2020-01-18T15:10:19.249582+01:00"
+    created: "2020-01-21T12:23:55.138986+01:00"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
-    digest: 9531b345ad5ba1f81733f318cc3098e06a86d575c1ca791e82b4354791f13af3
+    digest: 3a9365cf650d02bd462c8f2632a564243b2cbef7f3dd97c3d68a6a01662f8fcc
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -104,7 +104,7 @@ entries:
     version: 2.0.0
   - apiVersion: v1
     appVersion: 1.7.20
-    created: "2020-01-18T15:10:19.247281+01:00"
+    created: "2020-01-21T12:23:55.137158+01:00"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: faceea64ade0e935da15773a0bf40384c3d585c1f082adc655396185e8bed84f
@@ -122,4 +122,4 @@ entries:
     urls:
     - https://alekitto.github.io/charts/traefik-1.86.0.tgz
     version: 1.86.0
-generated: "2020-01-18T15:10:19.176262+01:00"
+generated: "2020-01-21T12:23:55.070028+01:00"
