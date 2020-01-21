@@ -28,7 +28,7 @@ data:
       {{- if .Values.traefikLogFormat }}
       format = {{ .Values.traefikLogFormat | quote }}
       {{- end }}
-    [serverTrasports]
+    [serverTransport]
       {{- if .Values.ssl.insecureSkipVerify }}
       insecureSkipVerify = true
       {{- end }}
