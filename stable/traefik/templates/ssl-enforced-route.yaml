@@ -16,7 +16,6 @@ spec:
           kind: Rule
           services:
             - name: ping@internal
-              namespace: default
               kind: TraefikService
           priority: 100000
           middlewares:
