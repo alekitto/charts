@@ -37,6 +37,16 @@ spec:
 {{ toYaml .Values.image.imagePullSecrets | indent 8 }}
       {{- end }}
       containers:
+      - name: {{ .Chart.Name }}-web-plugins
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        command: [ gosu, sentry, pip, install, --user, -r, /etc/sentry/requirements.txt ]
+        volumeMounts:
+          - mountPath: /etc/sentry
+            name: config
+            readOnly: true
+          - mountPath: /home/sentry/.local/lib/python2.7/site-packages
+            name: sentry-plugins
+            readOnly: false
       - name: db-init-job
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         command: ["sentry","upgrade","--noinput"]
@@ -101,10 +111,14 @@ spec:
         - mountPath: /etc/sentry
           name: config
           readOnly: true
+        - mountPath: /root/.local/lib/python2.7/site-packages
+          name: sentry-plugins
+          readOnly: true
         resources:
 {{ toYaml .Values.hooks.dbInit.resources | indent 10 }}
       volumes:
       - name: config
         configMap:
           name: {{ template "sentry.fullname" . }}
-
+      - name: sentry-plugins
+        emptyDir: {}
