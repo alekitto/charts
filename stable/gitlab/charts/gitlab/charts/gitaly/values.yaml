@@ -4,9 +4,14 @@
 
 global:
   gitaly:
+    enabled: true
     internal:
       names: ["default"]
     external: []
+    authToken: {}
+  # imagePullPolicy: IfNotPresent
+  redis:
+    password: {}
 
 internal: {}
 image:
@@ -22,27 +27,19 @@ service:
   tls:
     externalPort: 8076
     internalPort: 8076
-enabled: true
 serviceName: gitaly
 annotations: {}
 
 init:
   image: {}
     # repository:
-    # tag:
+  # tag:
   resources:
     requests:
       cpu: 50m
 
 ## Support for tolerations for pod scheduling
 tolerations: []
-
-global:
-  # imagePullPolicy: IfNotPresent
-  redis:
-    password: {}
-  gitaly:
-    authToken: {}
 
 logging:
   format: "json"
@@ -51,19 +48,21 @@ logging:
   # rubySentryDsn:
   # sentryEnvironment:
 git: {}
-  # catFileCacheSize:
+# catFileCacheSize:
 ruby: {}
   # maxRss:
   # gracefulRestartTimeout:
   # restartDelay:
-  # numWorkers:
+# numWorkers:
 prometheus: {}
-  # grpcLatencyBuckets: "[1.0, 1.5, 2.0, 2.5]"
+# grpcLatencyBuckets: "[1.0, 1.5, 2.0, 2.5]"
 
-unicorn: {}
+workhorse:
+  # by default, Workhorse is a part of the Unicorn Pods / Service
+  serviceName: unicorn
   # host: '0.0.0.0'
   # serviceName: 'unicorn'
-  # port: 8080
+  # port: 8181
 redis: {}
 shell:
   authToken: {}
@@ -71,7 +70,7 @@ shell:
     # - rpc: "/gitaly.SmartHTTPService/PostUploadPack"
     #   maxPerRepo: 20
     # - rpc: "/gitaly.SSHService/SSHUploadPack"
-    #   maxPerRepo: 20
+  #   maxPerRepo: 20
 
 ## Enable prometheus metrics and set the port to scrape the
 ## container on.

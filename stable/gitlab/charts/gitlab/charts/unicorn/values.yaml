@@ -9,7 +9,7 @@ image:
 init:
   image: {}
     # repository:
-    # tag:
+  # tag:
   resources:
     requests:
       cpu: 50m
@@ -20,7 +20,7 @@ tolerations: []
 monitoring:
   # Monitoring IP whitelist
   ipWhitelist:
-  - 0.0.0.0/0
+    - 0.0.0.0/0
   exporter:
     enabled: false
     port: 8083
@@ -41,7 +41,6 @@ metrics:
     prometheus.io/port: "8080"
     prometheus.io/path: "/-/metrics"
 service:
-  name: unicorn
   type: ClusterIP
   externalPort: 8080
   internalPort: 8080
@@ -55,10 +54,9 @@ ingress:
   proxyBodySize: "512m"
   tls: {}
     # secretName:
-    # enabled: true
+  # enabled: true
   annotations: {}
 workerProcesses: 2
-workerTimeout: 60
 memory: # in MB units
   min: 700
   max: 1024
@@ -106,25 +104,26 @@ global:
     annotations: {}
     tls: {}
       # secretName:
-      # enabled: true
+    # enabled: true
   hosts:
     domain: example.com
     hostSuffix:
     https: true
     gitlab: {}
       #name: gitlab.example.com
-      #https: false
+    #https: false
     registry: {}
       #name: registry.example.com
-      #https: false
+    #https: false
     minio: {}
       #name: minio.example.com
-      #https: false
+    #https: false
   psql: {}
     # host: '0.0.0.0'
     # port: '5432'
     # database: 'gitlabhq_production'
     # username: 'gitlab'
+    # pool: 10
     # preparedStatements: false
     # password:
     #   secret: gitlab-postgres
@@ -133,7 +132,7 @@ global:
     #   secret: gitlab-ssl-secret
     #   clientKey: client-key.pem
     #   clientCertificate: client-cert.pem
-    #   serverCA: server-ca.pem
+  #   serverCA: server-ca.pem
   redis:
     # host: '0.0.0.0'
     password: {}
@@ -145,6 +144,8 @@ global:
   minio:
     enabled:
     credentials: {}
+  unicorn: {}
+  # workerTimeout: 60
   appConfig:
     incomingEmail:
       enabled: false
@@ -223,7 +224,7 @@ registry:
 extra: {}
   # google_analytics_id: '_your_tracking_id'
   # piwik_url: '_your_piwik_url'
-  # piwik_site_id: '_your_piwik_site_id'
+# piwik_site_id: '_your_piwik_site_id'
 rack_attack:
   git_basic_auth:
     enabled: false

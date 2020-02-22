@@ -2,16 +2,16 @@
 
 {{/*
 Return the redis hostname
-If the postgresql host is provided, it will use that, otherwise it will fallback
+If the redis host is provided, it will use that, otherwise it will fallback
 to the service name
 */}}
 {{- define "gitlab.redis.host" -}}
-{{- if or .Values.redis.host .Values.global.redis.host -}}
-{{- coalesce .Values.redis.host .Values.global.redis.host -}}
-{{- else -}}
-{{- $name := default "redis" .Values.redis.serviceName -}}
-{{- printf "%s-%s" .Release.Name $name -}}
-{{- end -}}
+{{-   if or .Values.redis.host .Values.global.redis.host -}}
+{{-     coalesce .Values.redis.host .Values.global.redis.host -}}
+{{-   else -}}
+{{-     $name := default "redis" .Values.redis.serviceName -}}
+{{-     printf "%s-%s-master" .Release.Name $name -}}
+{{-   end -}}
 {{- end -}}
 
 {{/*
@@ -57,7 +57,7 @@ sentinels:
 {{- define "gitlab.redis.workhorse.sentinel-list" }}
 {{- $sentinelList := list }}
 {{- range $i, $entry := .Values.global.redis.sentinels }}
-  {{- $sentinelList = append $sentinelList (quote (print "tcp://" (trim $entry.host) ":" $entry.port)) }}
+  {{- $sentinelList = append $sentinelList (quote (print "tcp://" (trim $entry.host) ":" ( default 26379 $entry.port | int ) ) ) }}
 {{- end }}
 {{- $sentinelList | join "," }}
 {{- end -}}

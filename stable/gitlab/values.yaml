@@ -28,7 +28,7 @@ global:
       autoPause: true
 
   ## doc/installation/deployment.md#deploy-the-community-edition
-  # edition: ee
+  edition: ee
 
   ## doc/charts/globals.md#gitlab-version
   # gitlabVersion: master
@@ -41,13 +41,14 @@ global:
   ## doc/charts/globals.md#configure-host-settings
   hosts:
     domain: example.com
-    # hostSuffix:
+    hostSuffix:
     https: true
     externalIP:
     ssh: ~
     gitlab: {}
     minio: {}
     registry: {}
+    tls: {}
 
   ## doc/charts/globals.md#configure-ingress-settings
   ingress:
@@ -64,24 +65,25 @@ global:
     ## If allowing shared-secrets generation, this is OPTIONAL.
     license: {}
       # secret: RELEASE-gitlab-license
-      # key: license
+    # key: license
 
   ## Initial root password for this GitLab installation
   ## Secret created according to doc/installation/secrets.md#initial-root-password
   ## If allowing shared-secrets generation, this is OPTIONAL.
   initialRootPassword: {}
     # secret: RELEASE-gitlab-initial-root-password
-    # key: password
+  # key: password
 
   ## doc/charts/globals.md#configure-postgresql-settings
   psql:
     password: {}
       # secret:
-      # key:
+    # key:
     # host: postgresql.hostedsomewhere.else
     # port: 123
     # username: gitlab
     # database: gitlabhq_production
+    # pool: 10
     # preparedStatements: false
 
   ## doc/charts/globals.md#configure-redis-settings
@@ -98,9 +100,10 @@ global:
 
   ## doc/charts/globals.md#configure-gitaly-settings
   gitaly:
+    enabled: true
     authToken: {}
       # secret:
-      # key:
+    # key:
     internal:
       names: ['default']
     external: []
@@ -112,7 +115,7 @@ global:
   minio:
     enabled: true
     credentials: {}
-      # secret:
+    # secret:
 
   ## doc/charts/globals.md#configure-grafana-integration
   grafana:
@@ -135,6 +138,7 @@ global:
       snippets: true
       builds: true
     webhookTimeout:
+    maxRequestDurationSeconds:
 
     ## doc/charts/globals.md#cron-jobs-related-settings
     cron_jobs: {}
@@ -190,7 +194,7 @@ global:
       #   cron: "0 * * * *"
       ### Snapshot active user statistics
       # historical_data_worker:
-      #   cron: "0 12 * * *"
+    #   cron: "0 12 * * *"
 
 
 
@@ -207,25 +211,34 @@ global:
 
     ## doc/charts/globals.md#lfs-artifacts-uploads-packages-external-mr-diffs
     lfs:
+      enabled: true
+      proxy_download: true
       bucket: git-lfs
       connection: {}
         # secret:
-        # key:
+      # key:
     artifacts:
+      enabled: true
+      proxy_download: true
       bucket: gitlab-artifacts
       connection: {}
         # secret:
-        # key:
+      # key:
     uploads:
+      enabled: true
+      proxy_download: true
       bucket: gitlab-uploads
       connection: {}
         # secret:
-        # key:
+      # key:
     packages:
+      enabled: true
+      proxy_download: true
       bucket: gitlab-packages
       connection: {}
     externalDiffs:
       when:
+      proxy_download: true
       bucket: gitlab-mr-diffs
       connection: {}
 
@@ -235,7 +248,7 @@ global:
       bucket: gitlab-pseudo
       connection: {}
         # secret:
-        # key:
+      # key:
     backups:
       bucket: gitlab-backups
       tmpBucket: tmp
@@ -253,6 +266,9 @@ global:
       password:
         secret: ""
         key: password
+      expungeDeleted: false
+      logger:
+        logPath: "/dev/stdout"
       mailbox: inbox
       idleTimeout: 60
 
@@ -304,45 +320,50 @@ global:
       password: {}
         # secret:
         # key:
-      # host: postgresql.hostedsomewhere.else
-      # port: 123
-      # username: gitlab_replicator
-      # database: gitlabhq_geo_production
-      # ssl:
+        # host: postgresql.hostedsomewhere.else
+        # port: 123
+        # username: gitlab_replicator
+        # database: gitlabhq_geo_production
+        # ssl:
         # secret:
         # clientKey:
         # clientCertificate:
-        # serverCA:
+      # serverCA:
 
   ## doc/charts/globals.md#configure-gitlab-shell-settings
   shell:
     authToken: {}
       # secret:
-      # key:
+    # key:
     hostKeys: {}
-      # secret:
+    # secret:
 
   ## Rails application secrets
   ## Secret created according to doc/installation/secrets.md#gitlab-rails-secret
   ## If allowing shared-secrets generation, this is OPTIONAL.
   railsSecrets: {}
-    # secret:
+  # secret:
+
+  ## Rails generic setting, applicable to all Rails-based containers
+  rails:
+    bootsnap: # Enable / disable Shopify/Bootsnap cache
+      enabled: true
 
   ## doc/charts/globals.md#configure-registry-settings
   registry:
     bucket: registry
     certificate: {}
-      # secret:
+    # secret:
     httpSecret: {}
       # secret:
-      # key:
+    # key:
 
   ## GitLab Runner
   ## Secret created according to doc/installation/secrets.md#gitlab-runner-secret
   ## If allowing shared-secrets generation, this is OPTIONAL.
   runner:
     registrationToken: {}
-      # secret:
+    # secret:
 
   ## doc/installation/deployment.md#outgoing-email
   ## Outgoing email server settings
@@ -389,7 +410,11 @@ global:
   ## doc/installation/secrets.md#gitlab-workhorse-secret
   workhorse: {}
     # secret:
-    # key:
+  # key:
+
+  ## doc/charts/globals.md#configure-unicorn
+  unicorn:
+    workerTimeout: 60
 
   ## doc/charts/globals.md#custom-certificate-authorities
   # configuration of certificates container & custom CA injection
@@ -417,7 +442,7 @@ upgradeCheck:
   enabled: true
   image: {}
     # repository:
-    # tag:
+  # tag:
   securityContext:
     # in alpine/debian/busybox based images, this is `nobody:nogroup`
     runAsUser: 65534
@@ -427,8 +452,8 @@ upgradeCheck:
     requests:
       cpu: 50m
 
-## Settings to for the Let's Encrypt ACME Issuer
-# certmanager-issuer:
+  ## Settings to for the Let's Encrypt ACME Issuer
+  # certmanager-issuer:
   ## The email address to register certificates requested from Let's Encrypt.
   ## Required if using Let's Encrypt.
   # email: email@example.com
@@ -445,6 +470,8 @@ certmanager:
   # See https://github.com/jetstack/cert-manager/blob/master/deploy/charts/cert-manager/README.md#configuration
   rbac:
     create: true
+  webhook:
+    enabled: false
 
 ## doc/charts/nginx/index.md
 ## doc/architecture/decisions.md#nginx-ingress
@@ -521,19 +548,29 @@ prometheus:
 #   enabled: true
 ## doc/architecture/decisions.md#redis-ha
 ## doc/charts/redis-ha
-redis-ha:
-  enabled: false
-  nameOverride: redis
+redis:
+  install: true
+  existingSecret: gitlab-redis-secret
+  existingSecretPasswordKey: redis-password
+  usePasswordFile: true
+  cluster:
+    enabled: false
+  metrics:
+    enabled: true
 
 ## Instllation & configuration of stable/prostgresql
 ## See requirements.yaml for current version
 postgresql:
+  postgresqlUsername: gitlab
+  # This just needs to be set. It will use a second entry in existingSecret for postgresql-postgres-password
+  postgresqlPostgresPassword: bogus
   install: true
-  postgresUser: gitlab
-  postgresDatabase: gitlabhq_production
-  imageTag: 9.6.8
+  postgresqlDatabase: gitlabhq_production
+  image:
+    tag: 10.9.0
   usePasswordFile: true
-  existingSecret: 'secret'
+  existingSecret: 'bogus'
+  initdbScriptsConfigMap: 'bogus'
   metrics:
     enabled: true
     ## Optionally define additional custom metrics
@@ -629,7 +666,6 @@ grafana:
 #     enabled: false
 ## doc/charts/gitlab/gitaly
 #   gitaly:
-#     enabled: false
 ## doc/charts/gitlab/gitlab-shell
 #   gitlab-shell:
 #     enabled: false
