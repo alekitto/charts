@@ -1,0 +1,30 @@
+global:
+    kafka:
+        enabled: false
+    clickhouse: {}
+
+image:
+    repository: getsentry/snuba
+    tag: latest
+    pullPolicy: Always
+    # imagePullSecrets: {}
+
+annotations: []
+podLabels: []
+
+service:
+    type: ClusterIP
+    labels: {}
+
+    ## External IP addresses of service
+    ## Default: nil
+    ##
+    # externalIPs:
+    # - 192.168.0.1
+    nodePort:
+        http: 1218
+
+redis: {}
+
+kafka:
+    enabled: false

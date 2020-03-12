@@ -1,0 +1,83 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: {{ template "clickhouse.fullname" . }}
+    labels:
+        app: {{ template "clickhouse.fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+spec:
+    selector:
+        matchLabels:
+            app: {{ template "clickhouse.fullname" . }}
+            release: "{{ .Release.Name }}"
+    template:
+        metadata:
+{{- if .Values.annotations }}
+            annotations:
+{{ toYaml .Values.annotations | indent 16 }}
+{{- end }}
+            labels:
+                app: {{ template "clickhouse.fullname" . }}
+                release: "{{ .Release.Name }}"
+{{- if .Values.podLabels }}
+{{ toYaml .Values.podLabels | indent 16 }}
+{{- end }}
+
+        spec:
+{{- if .Values.nodeSelector }}
+            nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 16 }}
+{{- end }}
+{{- if .Values.image.imagePullSecrets }}
+            imagePullSecrets:
+{{ toYaml .Values.image.imagePullSecrets | indent 16 }}
+{{- end }}
+            containers:
+                -   name: {{ .Chart.Name }}
+                    image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+                    imagePullPolicy: {{ .Values.image.pullPolicy }}
+                    volumeMounts:
+                        -   mountPath: /var/lib/clickhouse
+                            name: clickhouse-data
+                            readOnly: false
+                    ports:
+                        - containerPort: 9000
+                        - containerPort: 8123
+                        - containerPort: 9009
+{{- if .Values.livenessProbe.enabled }}
+                    livenessProbe:
+                        httpGet:
+                            path: /
+                            port: 8123
+                            scheme: HTTP
+                        initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+                        periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+                        timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+                        successThreshold: 1
+                        failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+{{- end }}
+{{- if .Values.readinessProbe.enabled }}
+                    readinessProbe:
+                        httpGet:
+                            path: /
+                            port: 8123
+                            scheme: HTTP
+                        initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+                        periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+                        timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+                        successThreshold: {{ .Values.readinessProbe.successThreshold }}
+                        failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+{{- end }}
+                    resources:
+{{ toYaml .Values.resources | indent 24 }}
+            volumes:
+                -   name: clickhouse-data
+{{- if and .Values.persistence.enabled }}
+                    persistentVolumeClaim:
+                        claimName: {{ .Values.persistence.existingClaim | default (include "clickhouse.fullname" .) }}
+{{- else }}
+                    emptyDir: {}
+{{- end }}

@@ -1,0 +1,9 @@
+apiVersion: v1
+description: A service providing fast event searching, filtering and aggregation on arbitrary fields.
+name: snuba
+version: 1.0.0
+appVersion: latest
+sources:
+  - https://github.com/getsentry/snuba
+home: https://sentry.io/
+icon: https://sentry-brand.storage.googleapis.com/sentry-glyph-black.png

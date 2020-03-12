@@ -1,8 +1,8 @@
 apiVersion: v1
 description: Sentry is a cross-platform crash reporting and aggregation platform.
 name: sentry
-version: 3.2.2
-appVersion: 9.1.2
+version: 4.0.0
+appVersion: 10.0.x
 keywords:
   - debugging
   - logging

@@ -1,0 +1,7 @@
+dependencies:
+    - name: clickhouse
+      version: 1.0.0
+    - name: kafka
+      repository: https://charts.bitnami.com/bitnami
+      version: 7.2.0
+      condition: global.kafka.enabled or kafka.enabled

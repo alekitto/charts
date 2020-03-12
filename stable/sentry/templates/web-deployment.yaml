@@ -55,7 +55,10 @@ spec:
       initContainers:
       - name: {{ .Chart.Name }}-web-plugins
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        command: [ gosu, sentry, pip, install, --user, -r, /etc/sentry/requirements.txt ]
+        command:
+        - sh
+        - -c
+        - apt-get update && apt-get install -y git-core && gosu sentry pip install --user -r /etc/sentry/requirements.txt
         volumeMounts:
         - mountPath: /etc/sentry
           name: config
@@ -70,6 +73,8 @@ spec:
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         env:
+        - name: SNUBA
+          value: http://{{ include "snuba.fullname" . }}:1218
         - name: SENTRY_SECRET_KEY
           valueFrom:
             secretKeyRef:
@@ -92,12 +97,12 @@ spec:
           value: {{ template "sentry.postgresql.host" . }}
         - name: SENTRY_POSTGRES_PORT
           value: {{ template "sentry.postgresql.port" . }}
-        {{- if or (.Values.redis.enabled) (.Values.redis.password) }}
+        {{- if or (.Values.global.redis.enabled) (.Values.global.redis.password) }}
         - name: SENTRY_REDIS_PASSWORD
           valueFrom:
             secretKeyRef:
-            {{- if .Values.redis.existingSecret }}
-              name: {{ .Values.redis.existingSecret }}
+            {{- if .Values.global.redis.existingSecret }}
+              name: {{ .Values.global.redis.existingSecret }}
             {{- else }}
               name: {{ template "sentry.redis.secret" . }}
             {{- end }}
@@ -172,6 +177,7 @@ spec:
       - name: config
         configMap:
           name: {{ template "sentry.fullname" . }}
+          defaultMode: 0555
       - name: sentry-plugins
         emptyDir: {}
       - name: sentry-data

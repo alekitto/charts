@@ -82,12 +82,12 @@ spec:
           value: {{ template "sentry.postgresql.host" . }}
         - name: SENTRY_POSTGRES_PORT
           value: {{ template "sentry.postgresql.port" . }}
-        {{- if or (.Values.redis.enabled) (.Values.redis.password) }}
+        {{- if or (.Values.global.redis.enabled) (.Values.redis.password) (.Values.global.redis.existingSecret) }}
         - name: SENTRY_REDIS_PASSWORD
           valueFrom:
             secretKeyRef:
-            {{- if .Values.redis.existingSecret }}
-              name: {{ .Values.redis.existingSecret }}
+            {{- if .Values.global.redis.existingSecret }}
+              name: {{ .Values.global.redis.existingSecret }}
             {{- else }}
               name: {{ template "sentry.redis.secret" . }}
             {{- end }}
@@ -132,6 +132,7 @@ spec:
       - name: config
         configMap:
           name: {{ template "sentry.fullname" . }}
+          defaultMode: 0555
       - name: sentry-data
       {{- if and (.Values.filestore.filesystem.persistence.enabled) (.Values.filestore.filesystem.persistence.persistentWorkers) }}
         persistentVolumeClaim:

@@ -1,0 +1,9 @@
+dependencies:
+- name: clickhouse
+  repository: ""
+  version: 1.0.0
+- name: kafka
+  repository: https://charts.bitnami.com/bitnami
+  version: 7.2.0
+digest: sha256:8329a1876515c9bffa84c78475a54ebbfc76209323a19505b734a216e3580f03
+generated: "2020-01-31T13:26:43.224294+01:00"

@@ -1,0 +1,37 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+    name: {{ template "symbolicator.fullname" . }}-cleanup
+    labels:
+        app: {{ template "symbolicator.fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+spec:
+    schedule: '55 23 * * *'
+    successfulJobsHistoryLimit: 1
+    failedJobsHistoryLimit: 1
+    jobTemplate:
+        spec:
+            template:
+                metadata:
+                    labels:
+                        app: {{ template "symbolicator.fullname" . }}
+                        release: "{{ .Release.Name }}"
+
+                spec:
+                    restartPolicy: Never
+{{- if .Values.nodeSelector }}
+                    nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 28 }}
+{{- end }}
+{{- if .Values.image.imagePullSecrets }}
+                    imagePullSecrets:
+{{ toYaml .Values.image.imagePullSecrets | indent 28 }}
+{{- end }}
+                    containers:
+                        -   name: {{ include "symbolicator.fullname" . }}
+                            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+                            imagePullPolicy: {{ .Values.image.pullPolicy }}
+                            command: [ 'gosu', 'symbolicator', 'symbolicator', 'cleanup' ]

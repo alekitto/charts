@@ -1,0 +1,78 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+    name: {{ template "sentry.fullname" . }}-cleanup
+    labels:
+        app: {{ template "sentry.fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+spec:
+    schedule: '0 0 * * *'
+    successfulJobsHistoryLimit: 1
+    failedJobsHistoryLimit: 1
+    jobTemplate:
+        spec:
+            template:
+                metadata:
+                    labels:
+                        app: {{ template "sentry.fullname" . }}
+                        release: "{{ .Release.Name }}"
+
+                spec:
+                    restartPolicy: Never
+{{- if .Values.nodeSelector }}
+                    nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 28 }}
+{{- end }}
+{{- if .Values.image.imagePullSecrets }}
+                    imagePullSecrets:
+{{ toYaml .Values.image.imagePullSecrets | indent 28 }}
+{{- end }}
+                    containers:
+                        -   name: {{ include "sentry.fullname" . }}
+                            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+                            imagePullPolicy: {{ .Values.image.pullPolicy }}
+                            command: [ 'gosu', 'sentry', 'sentry', 'cleanup', '--days', {{ (default 90 .Values.eventRetentionDays) | quote }} ]
+                            volumeMounts:
+                                -   mountPath: /etc/sentry
+                                    name: config
+                                    readOnly: true
+                                -   mountPath: /home/sentry/.local/lib/python2.7/site-packages
+                                    name: sentry-plugins
+                                    readOnly: true
+                                -   mountPath: {{ .Values.filestore.filesystem.path }}
+                                    name: sentry-data
+                            env:
+                                -   name: SNUBA
+                                    value: http://{{ include "snuba.fullname" . }}:1218
+{{- if or (.Values.global.redis.enabled) (.Values.global.redis.password) }}
+                                -   name: SENTRY_REDIS_PASSWORD
+                                    valueFrom:
+                                        secretKeyRef:
+{{- if .Values.global.redis.existingSecret }}
+                                            name: {{ .Values.global.redis.existingSecret }}
+{{- else }}
+                                            name: {{ template "sentry.redis.secret" . }}
+{{- end }}
+                                            key: {{ template "sentry.redis.secretKey" . }}
+{{- end }}
+                                -   name: SENTRY_REDIS_HOST
+                                    value: {{ template "sentry.redis.host" . }}
+                                -   name: SENTRY_REDIS_PORT
+                                    value: {{ template "sentry.redis.port" . }}
+                    volumes:
+                        -   name: config
+                            configMap:
+                                name: {{ template "sentry.fullname" . }}
+                                defaultMode: 0555
+                        -   name: sentry-plugins
+                            emptyDir: {}
+                        -   name: sentry-data
+{{- if and (eq .Values.filestore.backend "filesystem") .Values.filestore.filesystem.persistence.enabled }}
+                            persistentVolumeClaim:
+                                claimName: {{ .Values.filestore.filesystem.persistence.existingClaim | default (include "sentry.fullname" .) }}
+{{- else }}
+                            emptyDir: {}
+{{ end }}
