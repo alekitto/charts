@@ -2,7 +2,7 @@
 {{- if eq (include "gitlab.ingress.enabled" $) "true" -}}
 {{- $minioHostname := include "gitlab.minio.hostname" . -}}
 {{- $tlsSecret := include "minio.tlsSecret" . -}}
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: {{ template "minio.fullname" . }}
