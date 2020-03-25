@@ -5,5 +5,11 @@ dependencies:
 - name: redis
   repository: https://kubernetes-charts.storage.googleapis.com/
   version: 9.3.2
-digest: sha256:3926aec2491d2d6af2683dd0651551b5e065087a06e67cb04bae8c389aec3d14
-generated: "2020-01-28T20:47:42.97277+01:00"
+- name: snuba
+  repository: ""
+  version: 1.0.0
+- name: symbolicator
+  repository: ""
+  version: 1.0.0
+digest: sha256:5473f2b212717acdc2158d5467ec62ecbb91ee4740ac4ad4a9c6bdf5b0de5c70
+generated: "2020-03-25T03:17:21.301166+01:00"

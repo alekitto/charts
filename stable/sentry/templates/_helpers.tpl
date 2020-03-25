@@ -82,7 +82,7 @@ Set postgres port
 {{/*
 Set kafka host
 */}}
-{{- define "sentry.kafka.host" -}}
+{{- define "cp-kafka.fullname" -}}
 {{- if .Values.global.kafka.enabled -}}
 {{- template "kafka.fullname" . -}}
 {{- else -}}

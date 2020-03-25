@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "sentry.fullname" . }}-web
+  name: {{ template "sentry.fullname" . }}-post-process-forwarder
   labels:
     app: {{ template "sentry.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
@@ -12,8 +12,8 @@ spec:
     matchLabels:
         app: {{ template "sentry.fullname" . }}
         release: "{{ .Release.Name }}"
-        role: web
-  replicas: {{ .Values.web.replicacount }}
+        role: forwarder
+  replicas: {{ .Values.forwarder.replicacount }}
   template:
     metadata:
       annotations:
@@ -21,62 +21,53 @@ spec:
         checksum/configYml: {{ .Values.config.configYml | sha256sum }}
         checksum/sentryConfPy: {{ .Values.config.sentryConfPy | sha256sum }}
         checksum/secrets.yaml: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
-      {{- if .Values.web.podAnnotations }}
-{{ toYaml .Values.web.podAnnotations | indent 8 }}
+      {{- if .Values.forwarder.podAnnotations }}
+{{ toYaml .Values.forwarder.podAnnotations | indent 8 }}
       {{- end }}
       labels:
         app: {{ template "sentry.fullname" . }}
         release: "{{ .Release.Name }}"
-        role: web
-        {{- if .Values.web.podLabels }}
-{{ toYaml .Values.web.podLabels | indent 8 }}
+        role: forwarder
+        {{- if .Values.forwarder.podLabels }}
+{{ toYaml .Values.forwarder.podLabels | indent 8 }}
         {{- end }}
     spec:
       serviceAccountName: {{ template "sentry.serviceAccountName" . }}
-      {{- if .Values.web.affinity }}
+      {{- if .Values.forwarder.affinity }}
       affinity:
-{{ toYaml .Values.web.affinity | indent 8 }}
+{{ toYaml .Values.forwarder.affinity | indent 8 }}
       {{- end }}
-      {{- if .Values.web.nodeSelector }}
+      {{- if .Values.forwarder.nodeSelector }}
       nodeSelector:
-{{ toYaml .Values.web.nodeSelector | indent 8 }}
+{{ toYaml .Values.forwarder.nodeSelector | indent 8 }}
       {{- end }}
-      {{- if .Values.web.tolerations }}
+      {{- if .Values.forwarder.tolerations }}
       tolerations:
-{{ toYaml .Values.web.tolerations | indent 8 }}
+{{ toYaml .Values.forwarder.tolerations | indent 8 }}
       {{- end }}
-      {{- if .Values.web.schedulerName }}
-      schedulerName: "{{ .Values.web.schedulerName }}"
+      {{- if .Values.forwarder.schedulerName }}
+      schedulerName: "{{ .Values.forwarder.schedulerName }}"
+      {{- end }}
+      {{- if .Values.forwarder.priorityClassName }}
+      priorityClassName: "{{ .Values.forwarder.priorityClassName }}"
       {{- end }}
       {{- if .Values.image.imagePullSecrets }}
       imagePullSecrets:
 {{ toYaml .Values.image.imagePullSecrets | indent 8 }}
       {{- end }}
-      initContainers:
-      - name: {{ .Chart.Name }}-web-plugins
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        command:
-        - sh
-        - -c
-        - apt-get update && apt-get install -y git-core && gosu sentry pip install --user -r /etc/sentry/requirements.txt
-        volumeMounts:
-        - mountPath: /etc/sentry
-          name: config
-          readOnly: true
-        - mountPath: /home/sentry/.local/lib/python2.7/site-packages
-          name: sentry-plugins
-          readOnly: false
       containers:
-      - name: {{ .Chart.Name }}-web
+      - name: {{ .Chart.Name }}-forwarder
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args:
+          - "run"
+          - "post-process-forwarder"
+          - "--commit-batch-size 1"
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         env:
         - name: SNUBA
           value: http://{{ include "snuba.fullname" . }}:1218
-        - name: SENTRY_USE_SSL
-          value: '1'
         - name: SENTRY_SECRET_KEY
           valueFrom:
             secretKeyRef:
@@ -137,63 +128,37 @@ spec:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /var/run/secrets/google/{{ .Values.filestore.gcs.credentialsFile }}
         {{ end }}
-{{- if .Values.web.env }}
-{{ toYaml .Values.web.env | indent 8 }}
+{{- if .Values.forwarder.env }}
+{{ toYaml .Values.forwarder.env | indent 8 }}
 {{- end }}
         volumeMounts:
         - mountPath: /etc/sentry
           name: config
           readOnly: true
-        - mountPath: /home/sentry/.local/lib/python2.7/site-packages
-          name: sentry-plugins
-          readOnly: false
-        - mountPath: {{ .Values.filestore.filesystem.path }}
-          name: sentry-data
         {{- if eq .Values.filestore.backend "gcs" }}
         - name: sentry-google-cloud-key
           mountPath: /var/run/secrets/google
-        {{ end }}
-        livenessProbe:
-          failureThreshold: 5
-          httpGet:
-            path: /_health/
-            port: {{ .Values.service.internalPort }}
-            scheme: HTTP
-          initialDelaySeconds: {{ .Values.web.probeInitialDelaySeconds }}
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 2
-        readinessProbe:
-          failureThreshold: 10
-          httpGet:
-            path: /_health/
-            port: {{ .Values.service.internalPort }}
-            scheme: HTTP
-          initialDelaySeconds: {{ .Values.web.probeInitialDelaySeconds }}
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 2
+        {{- end }}
+        {{- if eq .Values.filestore.backend "filesystem" }}
+        - mountPath: {{ .Values.filestore.filesystem.path }}
+          name: sentry-data
+        {{- end }}
         resources:
-{{ toYaml .Values.web.resources | indent 12 }}
+{{ toYaml .Values.forwarder.resources | indent 12 }}
       volumes:
       - name: config
         configMap:
           name: {{ template "sentry.fullname" . }}
           defaultMode: 0555
-      - name: sentry-plugins
-        emptyDir: {}
-      - name: sentry-data
-      {{- if and (eq .Values.filestore.backend "filesystem") .Values.filestore.filesystem.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ .Values.filestore.filesystem.persistence.existingClaim | default (include "sentry.fullname" .) }}
-      {{- else }}
-        emptyDir: {}
-      {{ end }}
       {{- if eq .Values.filestore.backend "gcs" }}
       - name: sentry-google-cloud-key
         secret:
           secretName: {{ .Values.filestore.gcs.secretName }}
       {{ end }}
-      {{- if .Values.web.priorityClassName }}
-      priorityClassName: "{{ .Values.web.priorityClassName }}"
-      {{- end }}
+      - name: sentry-data
+      {{- if and (.Values.filestore.filesystem.persistence.enabled) (.Values.filestore.filesystem.persistence.persistentforwarders) }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.filestore.filesystem.persistence.existingClaim | default (include "sentry.fullname" .) }}
+      {{- else }}
+        emptyDir: {}
+      {{ end }}

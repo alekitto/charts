@@ -30,9 +30,9 @@ If release name contains chart name it will be used as a full name.
   value: docker
 - name: CLICKHOUSE_HOST
   value: {{ include "clickhouse.fullname" . }}
-{{- if or .Values.kafka.enabled .Values.global.kafka.enabled .Values.global.kafka.host }}
+{{- if or .Values.kafka.enabled .Values.global.kafka.enabled }}
 - name: DEFAULT_BROKERS
-  value: {{ printf "%s:%s" (include "sentry.kafka.host" .) ((default 2181 .Values.kafka.service.port) | toString) }}
+  value: {{ printf "%s:%s" (include "cp-kafka.fullname" .) (9092 | toString) }}
 {{- end }}
 - name: REDIS_HOST
   value: {{ include "sentry.redis.host" . }}
@@ -50,18 +50,6 @@ If release name contains chart name it will be used as a full name.
 - name: UWSGI_MAX_REQUESTS
   value: '10000'
 - name: UWSGI_DISABLE_LOGGING
-  value: 'true'
-- name: UWSGI_ENABLE_THREADS
-  value: 'true'
-- name: UWSGI_DIE_ON_TERM
-  value: 'true'
-- name: UWSGI_NEED_APP
-  value: 'true'
-- name: UWSGI_IGNORE_SIGPIPE
-  value: 'true'
-- name: UWSGI_IGNORE_WRITE_ERRORS
-  value: 'true'
-- name: UWSGI_DISABLE_WRITE_EXCEPTION
   value: 'true'
 {{- end -}}
 
