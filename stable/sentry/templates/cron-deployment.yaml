@@ -52,6 +52,20 @@ spec:
       imagePullSecrets:
 {{ toYaml .Values.image.imagePullSecrets | indent 8 }}
       {{- end }}
+      initContainers:
+      - name: init-plugins
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        command:
+        - sh
+        - -c
+        - apt-get update && apt-get install -y git-core && gosu sentry pip install --user -r /etc/sentry/requirements.txt
+        volumeMounts:
+        - mountPath: /etc/sentry
+          name: config
+          readOnly: true
+        - mountPath: /home/sentry/.local/lib/python2.7/site-packages
+          name: sentry-plugins
+          readOnly: false
       containers:
       - name: {{ .Chart.Name }}-cron
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -126,6 +140,9 @@ spec:
           readOnly: true
         - mountPath: {{ .Values.filestore.filesystem.path }}
           name: sentry-data
+        - mountPath: /home/sentry/.local/lib/python2.7/site-packages
+          name: sentry-plugins
+          readOnly: false
         resources:
 {{ toYaml .Values.cron.resources | indent 12 }}
       volumes:
@@ -133,6 +150,8 @@ spec:
         configMap:
           name: {{ template "sentry.fullname" . }}
           defaultMode: 0555
+      - name: sentry-plugins
+        emptyDir: {}
       - name: sentry-data
       {{- if and (.Values.filestore.filesystem.persistence.enabled) (.Values.filestore.filesystem.persistence.persistentWorkers) }}
         persistentVolumeClaim:

@@ -12,6 +12,9 @@ data:
   {{- range $key, $value := .Values.plugins }}
     {{ $value }}
   {{- end }}
+  {{- if .Values.postgresql.replicas }}
+    django-multidb-router==0.8
+  {{- end }}
 
   docker-entrypoint.sh: |-
     #!/bin/bash
@@ -228,7 +231,44 @@ data:
                     or ''
                 ),
             },
+            {{- if .Values.postgresql.replicas }}
+            {{- range $key, $value := .Values.postgresql.replicas }}
+            'read_replica_{{ $key }}': {
+                'ENGINE': 'sentry.db.postgres',
+                'NAME': (
+                    env('SENTRY_DB_NAME')
+                    or env('POSTGRES_ENV_POSTGRES_USER')
+                    or 'postgres'
+                ),
+                'USER': (
+                    env('SENTRY_DB_USER')
+                    or env('POSTGRES_ENV_POSTGRES_USER')
+                    or 'postgres'
+                ),
+                'PASSWORD': (
+                    env('SENTRY_DB_PASSWORD')
+                    or env('POSTGRES_ENV_POSTGRES_PASSWORD')
+                    or ''
+                ),
+                'HOST': {{ $value | quote }},
+                'PORT': (
+                    env('SENTRY_POSTGRES_PORT')
+                    or ''
+                ),
+            },
+            {{- end }}
+            {{- end }}
         }
+
+    {{- if .Values.postgresql.replicas }}
+    SLAVE_DATABASES = [
+    {{- range $key, $value := .Values.postgresql.replicas }}
+        'read_replica_{{ $key }}',
+    {{- end }}
+    ]
+
+    DATABASE_ROUTERS = ('multidb.MasterSlaveRouter',)
+    {{- end }}
 
     # You should not change this setting after your database has been created
     # unless you have altered all schemas first

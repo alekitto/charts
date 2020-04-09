@@ -53,7 +53,7 @@ spec:
 {{ toYaml .Values.image.imagePullSecrets | indent 8 }}
       {{- end }}
       initContainers:
-      - name: {{ .Chart.Name }}-web-plugins
+      - name: init-plugins
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         command:
         - sh

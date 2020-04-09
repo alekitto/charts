@@ -55,6 +55,20 @@ spec:
       imagePullSecrets:
 {{ toYaml .Values.image.imagePullSecrets | indent 8 }}
       {{- end }}
+      initContainers:
+      - name: init-plugins
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        command:
+        - sh
+        - -c
+        - apt-get update && apt-get install -y git-core && gosu sentry pip install --user -r /etc/sentry/requirements.txt
+        volumeMounts:
+        - mountPath: /etc/sentry
+          name: config
+          readOnly: true
+        - mountPath: /home/sentry/.local/lib/python2.7/site-packages
+          name: sentry-plugins
+          readOnly: false
       containers:
       - name: {{ .Chart.Name }}-forwarder
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -135,6 +149,9 @@ spec:
         - mountPath: /etc/sentry
           name: config
           readOnly: true
+        - mountPath: /home/sentry/.local/lib/python2.7/site-packages
+          name: sentry-plugins
+          readOnly: false
         {{- if eq .Values.filestore.backend "gcs" }}
         - name: sentry-google-cloud-key
           mountPath: /var/run/secrets/google
@@ -150,6 +167,8 @@ spec:
         configMap:
           name: {{ template "sentry.fullname" . }}
           defaultMode: 0555
+      - name: sentry-plugins
+        emptyDir: {}
       {{- if eq .Values.filestore.backend "gcs" }}
       - name: sentry-google-cloud-key
         secret:

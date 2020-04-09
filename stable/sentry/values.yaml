@@ -240,6 +240,8 @@ postgresql:
     # existingSecret: secret-name
     # existingSecretKey: postgresql-password
 
+    replicas: []
+
 config:
     configYml: ""
     sentryConfPy: ""

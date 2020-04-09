@@ -36,6 +36,20 @@ spec:
       imagePullSecrets:
 {{ toYaml .Values.image.imagePullSecrets | indent 8 }}
       {{- end }}
+      initContainers:
+      - name: init-plugins
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        command:
+        - sh
+        - -c
+        - apt-get update && apt-get install -y git-core && gosu sentry pip install --user -r /etc/sentry/requirements.txt
+        volumeMounts:
+        - mountPath: /etc/sentry
+          name: config
+          readOnly: true
+        - mountPath: /home/sentry/.local/lib/python2.7/site-packages
+          name: sentry-plugins
+          readOnly: false
       containers:
       - name: user-create-job
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -111,9 +125,14 @@ spec:
         - mountPath: /etc/sentry
           name: config
           readOnly: true
+        - mountPath: /home/sentry/.local/lib/python2.7/site-packages
+          name: sentry-plugins
+          readOnly: false
       volumes:
       - name: config
         configMap:
           name: {{ template "sentry.fullname" . }}
           defaultMode: 0555
+      - name: sentry-plugins
+        emptyDir: {}
 {{- end -}}
