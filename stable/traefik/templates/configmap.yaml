@@ -106,7 +106,13 @@ data:
       {{- end }}
       {{- if .Values.metrics.prometheus.enabled }}
       [entryPoints.prometheus]
-      address = ":9100"
+      address = ":9105"
+      {{- end }}
+      {{- if .Values.entrypoints }}
+      {{- range $name, $port := .Values.entrypoints }}
+      [entryPoints.{{ $name }}]
+      address = ":{{ $port }}"
+      {{- end }}
       {{- end }}
     [ping]
     entryPoint = "{{ .Values.pingEntryPoint | default "http" }}"

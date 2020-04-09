@@ -38,8 +38,10 @@ spec:
           services:
               - name: api@internal
                 kind: TraefikService
+          {{- if .Values.dashboard.auth }}
           middlewares:
               - name: {{ template "traefik.fullname" . }}-dashboard-auth-middleware
+          {{- end }}
     {{- if .Values.dashboard.ingress.tls }}
     tls:
         {{ toYaml .Values.dashboard.ingress.tls | indent 8 }}

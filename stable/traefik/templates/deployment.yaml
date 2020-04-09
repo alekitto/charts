@@ -178,8 +178,17 @@ spec:
         {{- end }}
         {{- if .Values.metrics.prometheus.enabled }}
         - name: metrics
-          containerPort: 9100
+          containerPort: 9105
           protocol: TCP
+        {{- end }}
+        {{- if .Values.entrypoints }}
+        {{- range $name, $port := .Values.entrypoints }}
+        - name: {{ $name }}
+          containerPort: {{ $port | replace "/udp" "" }}
+          {{- if hasSuffix "/udp" $port }}
+          protocol: UDP
+          {{- end }}
+        {{- end }}
         {{- end }}
         args:
         - --configfile=/config/traefik.toml

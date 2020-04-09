@@ -1,6 +1,6 @@
 ## Default values for Traefik
 image: traefik
-imageTag: 2.1.3
+imageTag: 2.2.0
 
 ## Optionally specify an array of imagePullSecrets.
 ## Secrets must be manually created in the namespace.
@@ -530,3 +530,7 @@ extraVolumes: []
 extraVolumeMounts: []
 #   - name: example-name
 #     mountPath: /path/in/container
+
+# entrypoints: |
+  # [entrypoint.additional-entrypoint]
+  # ...
