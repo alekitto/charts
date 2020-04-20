@@ -10,12 +10,12 @@ dependencies:
   version: 7.7.3
 - name: gitlab-runner
   repository: https://charts.gitlab.io/
-  version: 0.13.1
+  version: 0.15.0
 - name: grafana
   repository: https://kubernetes-charts.storage.googleapis.com/
   version: 4.0.1
 - name: redis
   repository: https://kubernetes-charts.storage.googleapis.com/
   version: 10.3.4
-digest: sha256:fbe7aa28094cea1bc77b7de60c835b874af7687e17303af6dc103ad3894f4b4d
-generated: "2020-02-22T16:55:51.933541+01:00"
+digest: sha256:28231f2cd8d7e11a0a2f5ccb294ba8932d1156e102d13492532b6a138ff85a82
+generated: "2020-03-25T16:39:22.771326+01:00"
