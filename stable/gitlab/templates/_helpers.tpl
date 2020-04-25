@@ -15,7 +15,28 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{/* ######### Hostname templates */}}
+{{/*
+Run "fullname" as if it was in another chart. This is an imperfect emulation, but close.
+
+This is especially useful when you reference "fullname" services/pods which may or may not be easy to reconstruct.
+
+Call:
+
+```
+{{- include "gitlab.other.fullname" ( dict "context" . "chartName" "name-of-other-chart" ) -}}
+```
+*/}}
+{{- define "gitlab.other.fullname" -}}
+{{- $Chart := dict "Name" .chartName -}}
+{{- $Release := .context.Release -}}
+{{- $localNameOverride :=  (pluck "nameOverride" (pluck .chartName .context.Values | first) | first) -}}
+{{- $globalNameOverride :=  (pluck "nameOverride" (pluck .chartName .context.Values.global | first) | first) -}}
+{{- $nameOverride :=  coalesce $localNameOverride $globalNameOverride -}}
+{{- $Values := dict "nameOverride" $nameOverride "global" .context.Values.global -}}
+{{- include "fullname" (dict "Chart" $Chart "Release" $Release "Values" $Values) -}}
+{{- end -}}
+
+{{/* Hostname templates */}}
 
 {{/*
 Returns the hostname.
@@ -162,11 +183,11 @@ to "gitlab" default
 
 {{/*
 Return the db port
-If the postgresql port is provided, it will use that, otherwise it will fallback
-to 5432 default
+If the postgresql port is provided in subchart values or global values, it will use that, otherwise it will fallback
 */}}
 {{- define "gitlab.psql.port" -}}
-{{- coalesce .Values.global.psql.port 5432 -}}
+{{- $local := pluck "psql" $.Values | first -}}
+{{- default 5432 (pluck "port" $local $.Values.global.psql | first ) | int -}}
 {{- end -}}
 
 {{/*

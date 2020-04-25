@@ -6,16 +6,16 @@ dependencies:
   repository: https://kubernetes-charts.storage.googleapis.com/
   version: 10.2.0
 - name: postgresql
-  repository: https://kubernetes-charts.storage.googleapis.com/
+  repository: https://charts.bitnami.com/bitnami
   version: 7.7.3
 - name: gitlab-runner
   repository: https://charts.gitlab.io/
-  version: 0.15.0
+  version: 0.16.0
 - name: grafana
   repository: https://kubernetes-charts.storage.googleapis.com/
   version: 4.0.1
 - name: redis
-  repository: https://kubernetes-charts.storage.googleapis.com/
+  repository: https://charts.bitnami.com/bitnami
   version: 10.3.4
-digest: sha256:28231f2cd8d7e11a0a2f5ccb294ba8932d1156e102d13492532b6a138ff85a82
-generated: "2020-03-25T16:39:22.771326+01:00"
+digest: sha256:f4c76c1fab37daebe8a3c3961e50b45bdffb9675735738d7c10abdd176a707ed
+generated: "2020-04-24T21:38:04.169901+02:00"
