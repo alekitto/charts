@@ -1,0 +1,16 @@
+name: Publish Helm charts
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Helm Chart Releaser
+      uses: helm/chart-releaser-action@v1.0.0-rc.2
+      with:
+        charts_dir: /stable
