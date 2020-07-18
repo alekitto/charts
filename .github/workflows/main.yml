@@ -9,7 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Fetch history
+      run: git fetch --prune --unshallow
     - name: Helm Chart Releaser
       uses: helm/chart-releaser-action@v1.0.0-rc.2
       env:
