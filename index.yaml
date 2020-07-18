@@ -2,52 +2,8 @@ apiVersion: v1
 entries:
   gitlab:
   - apiVersion: v1
-    appVersion: 12.8.5
-    created: "2020-03-12T15:45:37.014029+01:00"
-    dependencies:
-    - alias: certmanager
-      condition: certmanager.install
-      name: cert-manager
-      repository: https://charts.jetstack.io/
-      version: 0.10.1
-    - condition: prometheus.install
-      name: prometheus
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 10.2.0
-    - condition: postgresql.install
-      name: postgresql
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 7.7.3
-    - condition: gitlab-runner.install
-      name: gitlab-runner
-      repository: https://charts.gitlab.io/
-      version: 0.14.0
-    - condition: global.grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.0.1
-    - condition: redis.install
-      name: redis
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 10.3.4
-    description: Web-based Git-repository manager with wiki and issue-tracking features.
-    digest: 5c720f4963c8bbffca2b3f41ea2d449885248b3b2d9e5b5b323970c80a2ba53a
-    home: https://about.gitlab.com/
-    icon: https://gitlab.com/gitlab-com/gitlab-artwork/raw/master/logo/logo-square.png
-    keywords:
-    - gitlab
-    maintainers:
-    - email: support@gitlab.com
-      name: GitLab Inc.
-    name: gitlab
-    sources:
-    - https://gitlab.com/gitlab-org/charts/gitlab
-    urls:
-    - https://alekitto.github.io/charts/gitlab-3.1.3.tgz
-    version: 3.1.3
-  - apiVersion: v1
     appVersion: 12.8.0
-    created: "2020-03-12T15:45:36.989479+01:00"
+    created: "2020-02-22T18:32:42.468374+01:00"
     dependencies:
     - alias: certmanager
       condition: certmanager.install
@@ -91,7 +47,7 @@ entries:
     version: 3.1.0
   - apiVersion: v1
     appVersion: 12.7.6
-    created: "2020-03-12T15:45:36.964968+01:00"
+    created: "2020-02-22T18:32:42.443327+01:00"
     dependencies:
     - alias: certmanager
       condition: certmanager.install
@@ -131,7 +87,7 @@ entries:
     version: 3.0.4
   - apiVersion: v1
     appVersion: 12.7.5
-    created: "2020-03-12T15:45:36.942194+01:00"
+    created: "2020-02-22T18:32:42.419431+01:00"
     dependencies:
     - alias: certmanager
       condition: certmanager.install
@@ -171,7 +127,7 @@ entries:
     version: 3.0.3
   - apiVersion: v1
     appVersion: 12.7.0
-    created: "2020-03-12T15:45:36.919777+01:00"
+    created: "2020-02-22T18:32:42.396336+01:00"
     dependencies:
     - alias: certmanager
       condition: certmanager.install
@@ -211,7 +167,7 @@ entries:
     version: 3.0.0
   - apiVersion: v1
     appVersion: master
-    created: "2020-03-12T15:45:36.875331+01:00"
+    created: "2020-02-22T18:32:42.343004+01:00"
     dependencies:
     - alias: certmanager
       condition: certmanager.install
@@ -251,7 +207,7 @@ entries:
     version: 2.6.3
   - apiVersion: v1
     appVersion: master
-    created: "2020-03-12T15:45:36.822887+01:00"
+    created: "2020-02-22T18:32:42.277967+01:00"
     description: Web-based Git-repository manager with wiki and issue-tracking features.
     digest: a84739325916223b243e3891dab339951f7132ff869ba0e6622aab59991edd92
     home: https://about.gitlab.com/
@@ -270,7 +226,7 @@ entries:
   postgresql:
   - apiVersion: v1
     appVersion: 11.6.0
-    created: "2020-03-12T15:45:37.016815+01:00"
+    created: "2020-02-22T18:32:42.470909+01:00"
     description: Chart for PostgreSQL, an object-relational database management system
       (ORDBMS) with an emphasis on extensibility and on standards-compliance.
     digest: a6de3a59175dc72a3a2682a60a574256bdc60089dd5c8ca2b892cbbb374596bf
@@ -291,39 +247,8 @@ entries:
     version: 8.1.2
   sentry:
   - apiVersion: v1
-    appVersion: 10.0.x
-    created: "2020-03-12T15:45:37.033511+01:00"
-    dependencies:
-    - condition: postgresql.enabled
-      name: postgresql
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 6.5.0
-    - condition: global.redis.enabled
-      name: redis
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 9.3.2
-    - name: snuba
-      repository: ""
-      version: 1.0.0
-    - name: symbolicator
-      repository: ""
-      version: 1.0.0
-    description: Sentry is a cross-platform crash reporting and aggregation platform.
-    digest: e1e21d84dbf41acb0184681385e2c5b89b66149b1379ec3267f828b295e35d13
-    home: https://sentry.io/
-    icon: https://sentry-brand.storage.googleapis.com/sentry-glyph-black.png
-    keywords:
-    - debugging
-    - logging
-    name: sentry
-    sources:
-    - https://github.com/getsentry/sentry
-    urls:
-    - https://alekitto.github.io/charts/sentry-4.0.0.tgz
-    version: 4.0.0
-  - apiVersion: v1
     appVersion: 9.1.2
-    created: "2020-03-12T15:45:37.024251+01:00"
+    created: "2020-02-22T18:32:42.478134+01:00"
     dependencies:
     - condition: postgresql.enabled
       name: postgresql
@@ -348,8 +273,28 @@ entries:
     version: 3.2.2
   traefik:
   - apiVersion: v1
+    appVersion: 2.2.6
+    created: "2020-07-18T12:55:32.42843105Z"
+    description: A Traefik based Kubernetes ingress controller with Let's Encrypt
+      support
+    digest: d4c65cffde0f965159bdf43364e00cc59ec88719eee81756f079c3b54b4c1227
+    home: https://traefik.io/
+    icon: https://docs.traefik.io/img/traefik.logo.png
+    keywords:
+    - traefik
+    - ingress
+    - acme
+    - letsencrypt
+    name: traefik
+    sources:
+    - https://github.com/containous/traefik
+    - https://github.com/helm/charts/tree/master/stable/traefik
+    urls:
+    - https://github.com/alekitto/charts/releases/download/traefik-2.0.5/traefik-2.0.5.tgz
+    version: 2.0.5
+  - apiVersion: v1
     appVersion: 2.1.3
-    created: "2020-03-12T15:45:37.04116+01:00"
+    created: "2020-02-22T18:32:42.485401+01:00"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 8ad800b79366ece8e878e9d036ee0732b8acd066eb2bbe8085c260181597dfb2
@@ -369,7 +314,7 @@ entries:
     version: 2.0.1
   - apiVersion: v1
     appVersion: 2.1.1
-    created: "2020-03-12T15:45:37.038573+01:00"
+    created: "2020-02-22T18:32:42.483121+01:00"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 3a9365cf650d02bd462c8f2632a564243b2cbef7f3dd97c3d68a6a01662f8fcc
@@ -389,7 +334,7 @@ entries:
     version: 2.0.0
   - apiVersion: v1
     appVersion: 1.7.20
-    created: "2020-03-12T15:45:37.036012+01:00"
+    created: "2020-02-22T18:32:42.480807+01:00"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: faceea64ade0e935da15773a0bf40384c3d585c1f082adc655396185e8bed84f
@@ -407,4 +352,4 @@ entries:
     urls:
     - https://alekitto.github.io/charts/traefik-1.86.0.tgz
     version: 1.86.0
-generated: "2020-03-12T15:45:36.810496+01:00"
+generated: "2020-02-22T18:32:42.261642+01:00"
