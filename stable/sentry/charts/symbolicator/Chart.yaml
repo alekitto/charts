@@ -1,9 +1,0 @@
-apiVersion: v1
-description: A symbolication service for native stacktraces and minidumps with symbol server support. It's a flexible frontend for parts of the symbolic library.
-name: symbolicator
-version: 1.0.0
-appVersion: latest
-sources:
-  - https://github.com/getsentry/symbolicator
-home: https://sentry.io/
-icon: https://github.com/getsentry/symbolicator/blob/master/artwork/logo.png

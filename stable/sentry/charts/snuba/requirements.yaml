@@ -1,5 +1,0 @@
-dependencies:
-    - name: clickhouse
-      version: 1.0.0
-    - name: kafka
-      condition: global.kafka.enabled or kafka.enabled

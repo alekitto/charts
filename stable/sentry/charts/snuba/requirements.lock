@@ -1,6 +1,0 @@
-dependencies:
-- name: clickhouse
-  repository: ""
-  version: 1.0.0
-digest: sha256:836221ac5ba6ed86689d88f1f75cbdc1f12bc417e09fe319a9547830aa3ca10f
-generated: "2020-03-25T03:17:56.498095+01:00"
