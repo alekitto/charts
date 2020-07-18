@@ -60,6 +60,14 @@ data:
         [entryPoints.http.forwardedHeaders]
         {{ template "traefik.forwardedHeadersTrustedIPs" . }}
       {{- end }}
+      {{- if .Values.ssl.enforced }}
+        [entryPoints.http.http]
+            [entryPoints.http.http.redirections]
+                [entryPoints.http.http.redirections.entryPoint]
+                    to = "https"
+                    scheme = "https"
+                    permanent = {{ if .Values.ssl.permanentRedirect -}}true{{- else -}}false{{- end -}}
+      {{- end }}
       {{- if .Values.timeouts }}
       {{- if .Values.timeouts.responding }}
         [entryPoints.http.respondingTimeouts]

@@ -67,9 +67,9 @@ spec:
   - port: 8080
     name: traefik
     {{- if (and (eq .Values.serviceType "NodePort") (eq .Values.deployType "Deployment") (not (empty .Values.service.nodePorts.https)))}}
-    nodePort: {{ .Values.service.nodePorts.dash }}
+    nodePort: {{ .Values.service.nodePorts.traefik }}
     {{- end }}
-    targetPort: dash
+    targetPort: traefik
   {{- end }}
   {{- if (.Values.metrics.prometheus.enabled)}}
   - port: 9105

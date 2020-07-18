@@ -1,6 +1,6 @@
 ## Default values for Traefik
 image: traefik
-imageTag: 2.2.0
+imageTag: 2.2.6
 
 ## Optionally specify an array of imagePullSecrets.
 ## Secrets must be manually created in the namespace.
@@ -10,11 +10,6 @@ imageTag: 2.2.0
 
 ## can be of type DaemonSet or Deployment
 deployType: Deployment
-
-testFramework:
-  enabled: false
-  image: "dduportal/bats"
-  tag: "0.4.0"
 
 ## can switch the service type to NodePort if required
 serviceType: LoadBalancer

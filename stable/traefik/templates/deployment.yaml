@@ -169,7 +169,7 @@ spec:
           {{- end }}
           protocol: TCP
         {{- if or .Values.dashboard.enabled .Values.metrics.prometheus.enabled }}
-        - name: dash
+        - name: traefik
           containerPort: 8080
           {{- if .Values.deployment.hostPort.dashboardEnabled }}
           hostPort: {{ default 8080 .Values.deployment.hostPort.dashboardPort }}
