@@ -12,5 +12,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Helm Chart Releaser
       uses: helm/chart-releaser-action@v1.0.0-rc.2
+      env:
+        CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         charts_dir: /stable
