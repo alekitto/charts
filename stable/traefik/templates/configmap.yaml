@@ -307,3 +307,8 @@ data:
         {{- end }}
       {{- end }}
     {{- end }}
+    {{- if .Values.pilot.enabled }}
+    [experimental]
+      [experimental.pilot]
+        token = {{ .Values.pilot.token | quote }}
+    {{- end }}

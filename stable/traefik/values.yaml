@@ -1,6 +1,6 @@
 ## Default values for Traefik
 image: traefik
-imageTag: 2.2.6
+imageTag: 2.3.0
 
 ## Optionally specify an array of imagePullSecrets.
 ## Secrets must be manually created in the namespace.
@@ -529,3 +529,13 @@ extraVolumeMounts: []
 # entrypoints: |
   # [entrypoint.additional-entrypoint]
   # ...
+
+# Use ingressClass. Ignored if Traefik version < 2.3 / kubernetes < 1.18.x
+ingressClass:
+  # true is not unit-testable yet, pending https://github.com/rancher/helm-unittest/pull/12
+  enabled: false
+  isDefaultClass: false
+
+pilot:
+  enabled: false
+  token: ""
