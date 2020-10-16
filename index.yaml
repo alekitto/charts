@@ -273,6 +273,26 @@ entries:
     version: 3.2.2
   traefik:
   - apiVersion: v1
+    appVersion: 2.3.0
+    created: "2020-10-16T14:35:43.470591217Z"
+    description: A Traefik based Kubernetes ingress controller with Let's Encrypt
+      support
+    digest: 9a1d7685a144df751451342c1dee90400b34933e2f49964557fda5dbf44668dd
+    home: https://traefik.io/
+    icon: https://docs.traefik.io/img/traefik.logo.png
+    keywords:
+    - traefik
+    - ingress
+    - acme
+    - letsencrypt
+    name: traefik
+    sources:
+    - https://github.com/containous/traefik
+    - https://github.com/helm/charts/tree/master/stable/traefik
+    urls:
+    - https://github.com/alekitto/charts/releases/download/traefik-2.1.0/traefik-2.1.0.tgz
+    version: 2.1.0
+  - apiVersion: v1
     appVersion: 2.2.6
     created: "2020-07-18T12:55:32.42843105Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
@@ -352,4 +372,15 @@ entries:
     urls:
     - https://alekitto.github.io/charts/traefik-1.86.0.tgz
     version: 1.86.0
+  trow:
+  - apiVersion: v2
+    appVersion: 0.3.0
+    created: "2020-10-16T14:35:43.698208718Z"
+    description: Helm chart for Trow registry
+    digest: 3be5d05effea799ba94b1185b37f2121772d2f0985748a0d4527b53882b8915a
+    name: trow
+    type: application
+    urls:
+    - https://github.com/alekitto/charts/releases/download/trow-0.3.0/trow-0.3.0.tgz
+    version: 0.3.0
 generated: "2020-02-22T18:32:42.261642+01:00"
