@@ -273,6 +273,26 @@ entries:
     version: 3.2.2
   traefik:
   - apiVersion: v1
+    appVersion: 2.3.2
+    created: "2020-11-18T09:37:11.337523216Z"
+    description: A Traefik based Kubernetes ingress controller with Let's Encrypt
+      support
+    digest: 1e725d40dd592f71bba3b68a677f825f01d38904a4f9b10e2c0d021c88a64aa8
+    home: https://traefik.io/
+    icon: https://docs.traefik.io/img/traefik.logo.png
+    keywords:
+    - traefik
+    - ingress
+    - acme
+    - letsencrypt
+    name: traefik
+    sources:
+    - https://github.com/containous/traefik
+    - https://github.com/helm/charts/tree/master/stable/traefik
+    urls:
+    - https://github.com/alekitto/charts/releases/download/traefik-2.1.1/traefik-2.1.1.tgz
+    version: 2.1.1
+  - apiVersion: v1
     appVersion: 2.3.0
     created: "2020-10-16T14:35:43.470591217Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
